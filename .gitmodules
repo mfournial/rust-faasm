@@ -1,0 +1,3 @@
+[submodule "workspace/faasm-sys"]
+	path = workspace/faasm-sys
+	url = git@github.com:mfournial/faasm-sys.git
