@@ -1,0 +1,24 @@
+[workspace]
+members = [
+    "faasm-wrapper",
+    "faasm-sys",
+]
+
+[profile.dev]
+debug = true
+
+[profile.release]
+opt-level = 3
+debug = false
+rpath = false
+lto = true
+debug-assertions = false
+codegen-units = 1
+
+[profile.bench]
+opt-level = 3
+debug = false
+rpath = false
+lto = true
+debug-assertions = false
+codegen-units = 1
