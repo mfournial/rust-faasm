@@ -1,27 +1,33 @@
-// Should be using c_char and other ffi type definitions.
-// Unsafe blocks don't enforce matching binding types of ptr borrow logic (only reference logic).
+// Re-export convinience println in wasm prelude
+#[cfg(target_arch = "wasm32")]
+pub mod prelude {
+    pub use faasm_sys::{println, __println};
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+pub mod prelude { }
+
 pub mod host_interface {
+    use faasm_sys::*;
 
-    use faasm_sys::{println, *};
-    const KEY: *mut i8 = r"blah".as_ptr() as *mut i8;
+    use std::os::raw::{c_uchar, c_long};
+    use std::ffi::{CStr};
 
-    pub fn read_state() {
-        let expected = [0, 1, 2];
-        let value: &mut [u8] = &mut [8, 8, 8];
-
+    pub fn read_state(key: &CStr, state_size: usize) -> Vec<c_uchar> {
+        let key_ptr = key.as_ptr();
+        let mut vec: Vec<c_uchar> = Vec::with_capacity(state_size);
         unsafe {
-            __faasm_read_state(KEY, value.as_ptr() as *mut u8, value.len() as i32);
+            __faasm_read_state(key_ptr, vec.as_mut_ptr(), vec.capacity() as c_long);
+            // Manually sets the size of the vector
+            vec.set_len(state_size);
         };
 
-        println!("{:?}, {:?}", expected, value);
-        assert_eq!(expected, value); // When this panics, it calls the wrong println. no_std?
+        vec
     }
 
-
-    pub fn write_state() {
-        let value:&[u8] = &[0, 1, 2];
-
-        unsafe { __faasm_write_state(KEY, value.as_ptr() as *mut u8, value.len() as i32); }
+    pub fn write_state(key: &CStr, state: &[c_uchar]) {
+        let key_ptr = key.as_ptr();
+        unsafe { __faasm_write_state(key_ptr, state.as_ptr(), state.len() as c_long); }
     }
 
 }

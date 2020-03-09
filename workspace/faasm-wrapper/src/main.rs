@@ -1,32 +1,17 @@
-// Printf
-//extern "C" {
-//    fn printf(fmt: *const i8, ...) -> i32;
-//}
-// *** 
-//    unsafe {
-//        printf("hello world\n\0".as_ptr() as *const i8);
-//    }
-// ***
-// use std::io::{self, Read, Write};
-// std::io::stdio...
-
-// use log::{Level, info};
-// console_log::init_with_level(Level::Debug).unwrap();
-// info!("It works!");
-
-extern crate faasm_wrapper;
+#[cfg(target_arch = "wasm32")]
+use faasm_wrapper::prelude::println; // Explicitely import println! macro to shaddow std's println!
 
 use faasm_wrapper::host_interface::{read_state, write_state};
+use faasm_wrapper::prelude::*;
+
+use std::ffi::{CString};
 
 fn main() {
-    write_state();
-    read_state();
-}
+    let key = CString::new("Hello, Faasm!").unwrap();
+    let original = vec![0, 1, 2];
+    write_state(&key, &original);
+    let result = read_state(&key, original.len());
 
-/*
-use faasm_wrapper::omp;
-
-fn main() {
-    assert_eq!(omp::get_num_threads(), 1);
+    println!("{:?}, {:?}", original, result);
+    assert_eq!(original, result); // When this panics, it calls the wrong println. no_std?
 }
-*/
