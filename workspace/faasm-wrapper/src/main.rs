@@ -4,7 +4,7 @@ use faasm_wrapper::prelude::println; // Explicitely import println! macro to sha
 use faasm_wrapper::host_interface::{read_state, write_state};
 use faasm_wrapper::prelude::*;
 
-use std::ffi::{CString};
+use std::ffi::CString;
 
 fn main() {
     let key = CString::new("Hello, Faasm!").unwrap();
