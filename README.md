@@ -5,8 +5,6 @@ This is project is for writing [Faasm](https://github.com/lsds/Faasm) Rust funct
 Both Faasm and `faasm-sys` are submodules of this project. Make sure
 you update submodules when cloning (`git submodules update --init`).
 
-This repo contains the `faasm-wrapper` crate.
-
 ## Quick-start
 
 Set up Faasm:
