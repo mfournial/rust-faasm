@@ -1,5 +1,6 @@
 #[cfg(target_arch = "wasm32")]
-use faasm_wrapper::prelude::println; // Explicitely import println! macro to shaddow std's println!
+// Explicitly import println! macro to shadow std's println!
+use faasm_wrapper::prelude::println;
 
 use faasm_wrapper::host_interface::{read_state, write_state};
 use faasm_wrapper::prelude::*;
