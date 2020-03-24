@@ -1,27 +1,25 @@
 # Rust Faasm workspace
 
-This is a project outline for writing serverless Rust functions for 
-[Faasm](https://github.com/lsds/Faasm). 
+This is project is for writing [Faasm](https://github.com/lsds/Faasm) Rust functions. 
 
-Contains the `faasm-sys` (as a **submodule**) and `faasm-wrapper` crates.
+Both Faasm and `faasm-sys` are submodules of this project. Make sure
+you update submodules when cloning (`git submodules update --init`).
+
+This repo contains the `faasm-wrapper` crate.
 
 ## Quick-start
 
-Run a local Faasm cluster:
+Set up Faasm:
 
 ```bash
-git clone https://github.com/lsds/Faasm faasm
-cd faasm
-docker-compose up -d
+# Download Faasm libs
+./bin/faasm-libs.sh
+
+# Start local cluster
+./bin/start-faasm.sh
 ``` 
 
-Open the Faasm CLI:
-
-```bash
-./bin/cli.sh
-```
-
-Compile the Hello World example in this project:
+Compile this project (if this fails, see the Rust notes below):
 
 ```bash
 cd workspace
@@ -31,8 +29,19 @@ cargo build --target wasm32-unknown-unknown
 Upload and run:
 
 ```bash
-inv upload rust hello --rust
-inv invoke rust hello
+./bin/upload.sh
+./bin/run.sh
+```
+
+## Rust Wasm
+
+Until the wasm target is released, you need to have a nightly toolchain set up, i.e.:
+
+```bash
+rustup update
+rustup toolchain install nightly
+rustup default nightly
+rustup target add wasm32-unknown-unknown --toolchain nightly
 ```
 
 ## Usage
