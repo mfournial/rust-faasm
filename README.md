@@ -12,14 +12,11 @@ This repo contains the `faasm-wrapper` crate.
 Set up Faasm:
 
 ```bash
-# Download Faasm libs
-./bin/faasm-libs.sh
-
 # Start local cluster
 ./bin/start-faasm.sh
 ``` 
 
-Compile this project (if this fails, see the Rust notes below):
+Compile this project (make sure you have the right toolchain, see Rust notes below):
 
 ```bash
 cd workspace
@@ -35,7 +32,7 @@ Upload and run:
 
 ## Rust Wasm
 
-Until the wasm target is released, you need to have a nightly toolchain set up, i.e.:
+To compile to wasm, it's recommended that you have a nightly toolchain set up, i.e.:
 
 ```bash
 rustup update
@@ -50,18 +47,11 @@ rustup target add wasm32-unknown-unknown --toolchain nightly
 
 * See [faasm-sys](https://github.com/mfournial/faasm-sys#requirements) requirements
 
-### Compile and run
+### Faasm local development
 
 If you have a Faasm [local development](https://github.com/lsds/Faasm/blob/master/docs/local_dev.md) 
-environment set up (advanced), you can run Rust functions as follows:
+environment set up (advanced), you can run this project with:
 
 ```bash
-cd workspace
-cargo build --target wasm32-unknown-unknown
-FUNCTION=faasm_wrapper
-MAIN_WRAPPER_DIR=/usr/local/code/faasm/wasm/rust/$FUNCTION
-mkdir -p MAIN_WRAPPER_DIR
-cp target/wasm32-unknown-unknown/debug/faasm-wrapper.wasm $MAIN_WRAPPER_DIR/function.wasm
-codegen_func rust $FUNCTION
-simple_runner rust $FUNCTION
+./bin/run-local.sh
 ```
